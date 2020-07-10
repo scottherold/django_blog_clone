@@ -82,3 +82,4 @@ class Comment(models.Model):
         """String representation of the Comment model instance. Returns the 
         text attribute as a representation of the model instance.
         """
+        return self.text
