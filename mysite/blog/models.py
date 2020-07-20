@@ -39,7 +39,7 @@ class Post(models.Model):
         """Routes the client to the post_detail route, and passes the the Post
         instance's Primary Key as a keyword argument
         """
-        return reverse("post_detail",kwargs={'pk':self.pk})
+        return reverse("post_detail", kwargs={'pk':self.pk})
 
     def __str__(self):
         """String representation of the Post model instance. Returns the title
@@ -61,7 +61,7 @@ class Comment(models.Model):
         approved (bool): Whether the comment has been approved by the Post
         author, or not.
     """
-    post = models.ForeignKey('blog.post',related_name='comments')
+    post = models.ForeignKey('blog.post', related_name='comments')
     author = models.CharField(max_length=200)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now())
