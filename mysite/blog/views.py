@@ -127,7 +127,26 @@ class DraftListView(LoginRequiredMixin, ListView):
         return Post.objects.filter(published_date__isnull=True).order_by('created_date')
 
 
-# COMMENTS VIEWS BELOW
+##################################################
+################ Function Views ##################
+##################################################
+@login_required
+def post_publish(request, pk):
+    """Requires an authenticated User to be logged in.
+    
+    Returns and redirects the client to blog/urls.py post_detail namespace
+    route after running the Post class's publish function if a Post Model
+    object data is located in the database using the primary key argument.
+    
+    Keyword arguments:
+    request -- the HTTP request type.
+    pk -- the primary key provided by the url route.
+    """
+    post = get_object_or_404(Post, pk=pk)
+    post.publish()
+    return redirect('post_detail', pk=pk)
+
+
 @login_required
 def add_comment_to_post(request, pk):
     """Requires an authenticated User to be logged in.
@@ -157,7 +176,7 @@ def add_comment_to_post(request, pk):
 
 
 @login_required
-def comment_approve(Request, pk):
+def comment_approve(request, pk):
     """Requires an authenticated User to be logged in.
 
     Returns and redirects the client to blog/urls.py post_detail namespace
@@ -171,3 +190,22 @@ def comment_approve(Request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
     return redirect('post_detail', pk=comment.post.pk)
+
+
+@login_required
+def comment_remove(request, pk):
+    """Requires an authenticated User to be logged in.
+
+    Returns and redirects the client to blog/urls.py post_detail namespace
+    route using the instantiated Comment Model's Post Model primary key after
+    running the Comment class's delete function if a Comment Model object data
+    is located in the database using the primary key argument.
+
+    Keyword arguments:
+    request -- the HTTP request type.
+    pk -- the primary key provided by the url route.
+    """
+    comment = get_object_or_404(Comment, pk=pk)
+    post_pk = comment.post.pk
+    comment.delete()
+    return redirect('post_detail', pk=post_pk)
