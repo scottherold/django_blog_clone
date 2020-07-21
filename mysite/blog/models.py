@@ -15,13 +15,13 @@ class Post(models.Model):
         created_date (datetime): The date that the blog post was created.
         published_date (datetime): The date the blog was published.
     """
-    author = models.ForeignKey('auth.User')
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     text = models.TextField()
-    created_date = models.DateTimeField(default=timezone.now())
+    created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True,null=True)
 
-    def _publish(self):
+    def publish(self):
         """Sets the published_date attribute using the timezone.now() function
         from the django.utils library and saves the updated Post data in the
         database.
@@ -29,7 +29,7 @@ class Post(models.Model):
         self.published_date = timezone.now()
         self.save()
 
-    def _approve_comments(self):
+    def approve_comments(self):
         """Filters and returns the comments attribute if the approved_comments
         field is equal to True.
         """
@@ -61,13 +61,13 @@ class Comment(models.Model):
         approved (bool): Whether the comment has been approved by the Post
         author, or not.
     """
-    post = models.ForeignKey('blog.post', related_name='comments')
+    post = models.ForeignKey('blog.post', related_name='comments', on_delete=models.CASCADE)
     author = models.CharField(max_length=200)
     text = models.TextField()
-    created_date = models.DateTimeField(default=timezone.now())
+    created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
 
-    def _approve(self):
+    def approve(self):
         """Sets the approved_comment attribute to True and saves the updated
         Comment data in the database.
         """

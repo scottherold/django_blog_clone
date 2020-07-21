@@ -33,7 +33,7 @@ class PostListView(ListView):
         """Returns all of the Post Model objects found in the database. Filters
         the posts by a post time of less than or equal to now. Orders the Post
         Model objects in descending order by 'published date'."""
-        return Post.objects.filter(publish_date__lte=timezone.now()).order_by('-published_date')
+        return Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
 
 
 class PostDetailView(DetailView):
